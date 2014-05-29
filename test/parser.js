@@ -164,6 +164,20 @@ module.exports = function(parser) {
               });
           });
         });
+
+        it('should encode/decode multibyte strings as binary', function () {
+          var messages = ['cash money €€€', 'hi'];
+          var packets = messages.map(function(data) {
+            return {type: 'message', data: data};
+          });
+          encPayload(packets, true, function(data) {
+            decPayload(data,
+              function (packet, index, total) {
+                expect(packet.type).to.eql('message');
+                expect(packet.data).to.eql(messages[index]);
+              });
+          });
+        });
       });
   
       describe('decoding error handling', function () {
