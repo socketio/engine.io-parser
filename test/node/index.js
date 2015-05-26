@@ -50,23 +50,23 @@ describe('parser', function() {
 
   it('should encode binary contents as binary', function(done) {
     var firstBuffer = new Buffer(5);
-      for (var i = 0; i < firstBuffer.length; i++) firstBuffer[i] = i;
-      var secondBuffer = new Buffer(4);
-      for (var i = 0; i < secondBuffer.length; i++) secondBuffer[i] = firstBuffer.length + i;
+    for (var i = 0; i < firstBuffer.length; i++) firstBuffer[i] = i;
+    var secondBuffer = new Buffer(4);
+    for (var i = 0; i < secondBuffer.length; i++) secondBuffer[i] = firstBuffer.length + i;
 
-      encPayloadB([{ type: 'message', data: firstBuffer }, { type: 'message', data: secondBuffer }], function(data) {
-        decPayloadB(data,
-          function(packet, index, total) {
-            var isLast = index + 1 == total;
-            expect(packet.type).to.eql('message');
-            if (!isLast) {
-              expect(packet.data).to.eql(firstBuffer);
-            } else {
-              expect(packet.data).to.eql(secondBuffer);
-              done();
-            }
-          });
-      });
+    encPayloadB([{ type: 'message', data: firstBuffer }, { type: 'message', data: secondBuffer }], function(data) {
+      decPayloadB(data,
+        function(packet, index, total) {
+          var isLast = index + 1 == total;
+          expect(packet.type).to.eql('message');
+          if (!isLast) {
+            expect(packet.data).to.eql(firstBuffer);
+          } else {
+            expect(packet.data).to.eql(secondBuffer);
+            done();
+          }
+        });
+    });
   });
 
   it('should encode mixed binary and string contents as binary', function(done) {
