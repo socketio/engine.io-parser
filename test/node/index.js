@@ -50,23 +50,23 @@ describe('parser', function() {
 
   it('should encode binary contents as binary', function(done) {
     var firstBuffer = new Buffer(5);
-      for (var i = 0; i < firstBuffer.length; i++) firstBuffer[i] = i;
-      var secondBuffer = new Buffer(4);
-      for (var i = 0; i < secondBuffer.length; i++) secondBuffer[i] = firstBuffer.length + i;
+    for (var i = 0; i < firstBuffer.length; i++) firstBuffer[i] = i;
+    var secondBuffer = new Buffer(4);
+    for (var i = 0; i < secondBuffer.length; i++) secondBuffer[i] = firstBuffer.length + i;
 
-      encPayloadB([{ type: 'message', data: firstBuffer }, { type: 'message', data: secondBuffer }], function(data) {
-        decPayloadB(data,
-          function(packet, index, total) {
-            var isLast = index + 1 == total;
-            expect(packet.type).to.eql('message');
-            if (!isLast) {
-              expect(packet.data).to.eql(firstBuffer);
-            } else {
-              expect(packet.data).to.eql(secondBuffer);
-              done();
-            }
-          });
-      });
+    encPayloadB([{ type: 'message', data: firstBuffer }, { type: 'message', data: secondBuffer }], function(data) {
+      decPayloadB(data,
+        function(packet, index, total) {
+          var isLast = index + 1 == total;
+          expect(packet.type).to.eql('message');
+          if (!isLast) {
+            expect(packet.data).to.eql(firstBuffer);
+          } else {
+            expect(packet.data).to.eql(secondBuffer);
+            done();
+          }
+        });
+    });
   });
 
   it('should encode mixed binary and string contents as binary', function(done) {
@@ -84,6 +84,38 @@ describe('parser', function() {
             expect(packet.data).to.eql('hello');
           } else {
             expect(packet.type).to.eql('close');
+            done();
+          }
+        });
+    });
+  });
+
+  it('should encode an arraybuffer as b64', function(done) {
+    var data = new Uint8Array(5);
+    for (var i = 0; i < data.length; i++) { data[i] = i; }
+    encode({ type: 'message', data: data }, function(encoded) {
+      var packet = decode(encoded, 'arraybuffer')
+      expect(packet.type).to.eql('message');
+      expect(new Uint8Array(packet.data)).to.eql(data);
+      done();
+    });
+  });
+
+  it('should encode arraybuffers as b64', function(done) {
+    var firstBuffer = new Uint8Array(5);
+    for (var i = 0; i < firstBuffer.length; i++) firstBuffer[i] = i;
+    var secondBuffer = new Uint8Array(4);
+    for (var i = 0; i < secondBuffer.length; i++) secondBuffer[i] = firstBuffer.length + i;
+
+    encPayload([{ type: 'message', data: firstBuffer }, { type: 'message', data: secondBuffer }], function(data) {
+      decPayload(data,
+        function(packet, index, total) {
+          var isLast = index + 1 == total;
+          expect(packet.type).to.eql('message');
+          if (!isLast) {
+            expect(new Uint8Array(packet.data)).to.eql(firstBuffer);
+          } else {
+            expect(new Uint8Array(packet.data)).to.eql(secondBuffer);
             done();
           }
         });
