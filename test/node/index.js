@@ -25,7 +25,7 @@ describe('parser', function() {
     var data = new Buffer(5);
     for (var i = 0; i < data.length; i++) { data[i] = i; }
     encode({ type: 'message', data: data }, function(encoded) {
-      expect(decode(encoded)).to.eql({ type: 'message', data: data }); 
+      expect(decode(encoded)).to.eql({ type: 'message', data: data });
       done();
     });
   });
@@ -126,6 +126,22 @@ describe('parser', function() {
       var decoded = decode(encoded, 'arraybuffer');
       expect(decoded.type).to.eql('message');
       expect(areArraysEqual(new Int32Array(decoded.data), typedArray)).to.eql(true);
+      done();
+    });
+  });
+
+  it('should encode a string message with lone surrogates replaced', function(done) {
+    var data = String.fromCharCode(0xd800);
+    encode({ type: 'message', data: data }, null, true, function(encoded) {
+      expect(decode(encoded, null, true)).to.eql({ type: 'message', data: '\ufffd' });
+      done();
+    });
+  });
+
+  it('should encode a string message with valid surrogate pairs', function(done) {
+    var data = String.fromCharCode(0xd800) + String.fromCharCode(0xdc00);
+    encode({ type: 'message', data: data }, null, true, function(encoded) {
+      expect(decode(encoded, null, true)).to.eql({ type: 'message', data: data });
       done();
     });
   });
