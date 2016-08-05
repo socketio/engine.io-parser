@@ -1,10 +1,10 @@
 language: node_js
 sudo: false
 node_js:
-- 0.10
-- 0.12
-- 4.0
-sudo: false
+  - "0.10"
+  - "0.12"
+  - "4"
+  - "6"
 notifications:
   irc: irc.freenode.org##socket.io
 matrix:
@@ -41,3 +41,6 @@ matrix:
     env: BROWSER_NAME=android BROWSER_VERSION=5.1
   - node_js: '0.12'
     env: BROWSER_NAME=android BROWSER_VERSION=latest
+cache:
+  directories:
+    - node_modules
