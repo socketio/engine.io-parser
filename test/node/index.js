@@ -147,7 +147,14 @@ describe('parser', function() {
     var decoded2 = decode(buffer2, 'arraybuffer');
     expect(decoded1).to.eql({ type: 'message', data: buffer1.slice(1)});
     expect(new Uint8Array(decoded1.data)).to.eql(new Uint8Array(buffer1.slice(1)));
-    expect(decoded2).to.eql({ type: 'message', data:  new ArrayBuffer(buffer2.slice(1))});
+      
+    var testBuffer = new ArrayBuffer(decoded2.data.byteLength);
+    var decoded2view = new DataView(decoded2.data);
+    var testBufferview = new DataView(testBuffer);
+    for (var i = 0; i < decoded2view.byteLength ; i++) {
+        testBufferview.setInt8(i, decoded2view.getInt8(i));
+    }
+    expect(decoded2).to.eql({ type: 'message', data:  testBuffer});
     expect(new Uint8Array(decoded2.data)).to.eql(new Uint8Array(buffer2.slice(1)));
     done();
   });
