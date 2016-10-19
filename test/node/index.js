@@ -116,7 +116,7 @@ describe('parser', function() {
     });
   });
 
-  it('should decode an ArrayBuffer/Buffer with undeclared type as binary', function(done) {
+  it('should decode an ArrayBuffer/Buffer with undeclared type as binary', function() {
     var buffer1 = new ArrayBuffer(4);
     var dataview = new DataView(buffer1);
     var buffer2 = new Buffer(4);
@@ -131,10 +131,9 @@ describe('parser', function() {
     expect(new Uint8Array(decoded1.data)).to.eql(new Uint8Array(buffer1.slice(1)));
     expect(decoded2).to.eql({ type: 'message', data: new Buffer(buffer2.slice(1))});
     expect(new Uint8Array(decoded2.data)).to.eql(new Uint8Array(buffer2.slice(1)));
-    done();
   });
 
-  it('should decode an ArrayBuffer/Buffer as binary of type ArrayBuffer', function(done) {
+  it('should decode an ArrayBuffer/Buffer as binary of type ArrayBuffer', function() {
     var buffer1 = new ArrayBuffer(4);
     var dataview = new DataView(buffer1);
     var buffer2 = new Buffer(4);
@@ -156,7 +155,6 @@ describe('parser', function() {
     }
     expect(decoded2).to.eql({ type: 'message', data:  testBuffer});
     expect(new Uint8Array(decoded2.data)).to.eql(new Uint8Array(buffer2.slice(1)));
-    done();
   });
 
   it('should encode/decode a typed array as binary', function(done) {
