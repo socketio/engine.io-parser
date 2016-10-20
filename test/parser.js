@@ -124,6 +124,15 @@ module.exports = function(parser) {
             expect(data).to.match(/^[0-9]$/);
          });
         });
+
+        it('should encode a string message with lone surrogates replaced', function(done) {
+          var data = '\uDC00 a\uDC00 \uDBFF\uDC00 \uDBFFb \uDBFF';
+          encode({ type: 'message', data: data }, null, true, function(encoded) {
+           expect(decode(encoded, null, true)).to.eql({ type: 'message', data: '\uFFFD \uFFFD \uDBFF\uDC00 \uFFFDb \uFFFD' });
+           done();
+          });
+        });
+
       });
 
       describe('decoding error handing', function () {
