@@ -1,6 +1,0 @@
-ui: mocha-bdd
-tunnel:
-  type: ngrok
-  authtoken: 2c54HKt2XhnnyXGyqfuUB_4iNMifwwcb3J4xkrCWFbW
-  proto: tcp
-browser_retries: 20
