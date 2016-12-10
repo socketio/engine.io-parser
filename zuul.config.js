@@ -18,18 +18,16 @@ var zuulConfig = module.exports = {
 
   browsers: [{
     name: 'chrome',
-    version: '-1..latest',
-    platform: 'Windows 10'
+    version: 'latest'
   }, {
     name: 'firefox',
-    version: '-1..latest',
-    platform: 'Windows 10'
+    version: 'latest'
   }, {
     name: 'internet explorer',
-    version: '8..11'
+    version: '6..10'
   }, {
     name: 'safari',
-    version: '-3..latest'
+    version: 'latest'
   }, {
     name: 'iphone',
     version: '-3..latest'
@@ -38,7 +36,7 @@ var zuulConfig = module.exports = {
     version: '-3..latest'
   }, {
     name: 'ipad',
-    version: '-3..latest'
+    version: 'latest'
   }, {
     name: 'microsoftedge',
     version: 'latest'

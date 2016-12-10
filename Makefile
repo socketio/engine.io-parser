@@ -13,9 +13,4 @@ test-zuul:
 	@./node_modules/zuul/bin/zuul \
 		test/index.js
 
-test-local:
-	@./node_modules/zuul/bin/zuul \
-		--local 0\
-		test/index.js
-
 .PHONY: test
